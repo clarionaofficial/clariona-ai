@@ -1,0 +1,7 @@
+{
+  "name": "Clariona AI - Premium Digital Agency",
+  "description": "Websites, Local Ranking, and AI Voice Agents built to grow your business. Clariona AI provides premium digital services for modern brands.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
