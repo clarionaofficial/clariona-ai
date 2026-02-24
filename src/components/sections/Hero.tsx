@@ -95,10 +95,9 @@ export const Hero = () => {
                 className="w-full h-full"
               >
                 <img
-                  src="https://picsum.photos/seed/happy-office-man-smiling/1200/1200"
+                  src="/happy-man-coffee.png"
                   alt="Happy Client"
                   className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
                 />
               </motion.div>
               {/* Subtle overlay to tie in with brand colors */}
