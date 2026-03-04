@@ -32,6 +32,13 @@ export const ServicesOverview = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => {
             const Icon = IconMap[service.icon];
+            const colors = [
+              'var(--color-service-1)',
+              'var(--color-service-2)',
+              'var(--color-service-3)'
+            ];
+            const cardColor = colors[index % colors.length];
+
             return (
               <motion.div
                 key={service.id}
@@ -39,10 +46,11 @@ export const ServicesOverview = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group p-8 rounded-2xl bg-white/60 backdrop-blur-sm border border-brand-blue/10 hover:border-brand-blue/30 transition-all hover:shadow-2xl hover:-translate-y-2 hover:bg-white"
+                style={{ backgroundColor: cardColor }}
+                className="group p-8 rounded-2xl border border-white/20 transition-all hover:shadow-2xl hover:-translate-y-2 hover:brightness-105"
               >
-                <div className="w-14 h-14 rounded-xl bg-brand-blue/5 border border-brand-blue/10 flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 group-hover:bg-brand-blue group-hover:text-white transition-all">
-                  <Icon className="group-hover:text-white transition-colors" size={28} />
+                <div className="w-14 h-14 rounded-xl bg-white/20 border border-white/20 flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 group-hover:bg-white group-hover:text-brand-heading transition-all">
+                  <Icon className="text-brand-heading transition-colors" size={28} />
                 </div>
                 <h3 className="text-xl font-bold text-brand-heading mb-4">{service.title}</h3>
                 <p className="text-brand-body text-sm mb-6 leading-relaxed">
@@ -51,14 +59,14 @@ export const ServicesOverview = () => {
                 <ul className="space-y-3 mb-8">
                   {service.benefits.map((benefit: string) => (
                     <li key={benefit} className="flex items-center gap-2 text-sm text-brand-body">
-                      <div className="w-1.5 h-1.5 rounded-full bg-linear-to-br from-brand-orange to-brand-orange/60 shadow-[0_0_8px_rgba(255,176,122,0.4)]" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-brand-heading/30" />
                       {benefit}
                     </li>
                   ))}
                 </ul>
                 <Link
                   to={service.href}
-                  className="inline-flex items-center gap-2 text-brand-blue font-semibold text-sm hover:gap-3 transition-all"
+                  className="inline-flex items-center gap-2 text-brand-heading font-bold text-sm hover:gap-3 transition-all"
                 >
                   {t('servicesOverview.learnMore')} <ArrowRight size={16} />
                 </Link>
