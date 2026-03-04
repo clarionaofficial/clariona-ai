@@ -21,8 +21,8 @@ export const HowWeWork = () => {
 
         <div className="relative">
           {/* Connector Line */}
-          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-brand-blue/10 -translate-y-1/2 hidden lg:block" />
-          
+          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-linear-to-r from-brand-blue/20 via-brand-orange/20 to-brand-blue/20 -translate-y-1/2 hidden lg:block" />
+
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12 lg:gap-8">
             {steps.map((step: any, index: number) => (
               <motion.div
@@ -33,7 +33,8 @@ export const HowWeWork = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="relative flex flex-col items-center text-center group"
               >
-                <div className="w-16 h-16 rounded-full bg-white border-2 border-brand-blue/20 flex items-center justify-center text-brand-blue font-bold text-xl mb-6 z-10 group-hover:border-brand-blue group-hover:bg-brand-blue group-hover:text-white transition-all shadow-sm">
+                <div className="relative w-16 h-16 rounded-full bg-white border-2 border-brand-blue/20 flex items-center justify-center text-brand-blue font-bold text-xl mb-6 z-10 group-hover:border-brand-blue group-hover:bg-brand-blue group-hover:text-white transition-all shadow-sm">
+                  <div className="absolute inset-0 rounded-full border border-brand-blue/20 animate-ping group-hover:hidden" />
                   0{index + 1}
                 </div>
                 <h3 className="text-lg font-bold text-brand-heading mb-3">{step.title}</h3>

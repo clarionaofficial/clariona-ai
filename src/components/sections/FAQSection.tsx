@@ -26,11 +26,17 @@ export const FAQSection = () => {
           {faqs.map((faq: any, index: number) => (
             <div
               key={index}
-              className="border border-brand-blue/10 rounded-2xl overflow-hidden transition-all"
+              className={cn(
+                "border rounded-2xl overflow-hidden transition-all duration-300",
+                openIndex === index ? "border-brand-blue/30 shadow-sm" : "border-brand-blue/10"
+              )}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full flex items-center justify-between p-6 text-left hover:bg-brand-bg transition-colors"
+                className={cn(
+                  "w-full flex items-center justify-between p-6 text-left transition-colors",
+                  openIndex === index ? "bg-brand-blue/[0.03]" : "hover:bg-brand-bg"
+                )}
               >
                 <span className="font-semibold text-brand-heading">{faq.question}</span>
                 <ChevronDown
@@ -46,7 +52,10 @@ export const FAQSection = () => {
                 animate={{ height: openIndex === index ? 'auto' : 0 }}
                 className="overflow-hidden"
               >
-                <div className="p-6 pt-0 text-brand-body text-sm leading-relaxed border-t border-brand-blue/5">
+                <div className={cn(
+                  "p-6 pt-0 text-brand-body text-sm leading-relaxed border-t border-brand-blue/5 transition-colors",
+                  openIndex === index ? "bg-brand-blue/[0.03]" : ""
+                )}>
                   {faq.answer}
                 </div>
               </motion.div>
@@ -54,6 +63,6 @@ export const FAQSection = () => {
           ))}
         </div>
       </div>
-    </section>
+    </section >
   );
 };

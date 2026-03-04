@@ -82,7 +82,7 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="relative"
           >
-            <div className="aspect-square md:aspect-4/3 lg:aspect-square rounded-3xl overflow-hidden shadow-2xl border border-brand-blue/10 relative">
+            <div className="aspect-square md:aspect-4/3 lg:aspect-square rounded-3xl overflow-hidden shadow-2xl border border-brand-blue/10 relative group">
               <motion.div
                 initial={{ scale: 1.2 }}
                 animate={{ scale: 1 }}
@@ -101,14 +101,14 @@ export const Hero = () => {
                 />
               </motion.div>
               {/* Subtle overlay to tie in with brand colors */}
-              <div className="absolute inset-0 bg-linear-to-tr from-brand-blue/10 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-linear-to-tr from-brand-blue/10 via-transparent to-brand-orange/5 pointer-events-none" />
             </div>
 
             {/* Floating Customer Review */}
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-6 -right-6 glass p-5 rounded-2xl shadow-xl hidden sm:block z-20 max-w-[240px]"
+              className="absolute -top-6 -right-6 glass p-5 rounded-2xl shadow-xl hidden sm:block z-20 max-w-[240px] border-t-2 border-brand-blue/30"
             >
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
@@ -145,7 +145,8 @@ export const Hero = () => {
                   <div className="w-2.5 h-2.5 rounded-full bg-amber-400/20" />
                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/20" />
                 </div>
-                <div className="text-[10px] font-mono text-brand-blue/40 tracking-widest uppercase">
+                <div className="text-[10px] font-mono text-brand-blue/40 tracking-widest uppercase flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
                   Clariona OS v2.5
                 </div>
                 <div className="w-12" />
@@ -157,15 +158,15 @@ export const Hero = () => {
                   {/* Left: Visualizer */}
                   <div className="flex flex-col items-center justify-center space-y-8">
                     <div className="relative w-48 h-48 flex items-center justify-center">
-                      <motion.div 
+                      <motion.div
                         animate={{ scale: [1, 1.1, 1], rotate: 360 }}
                         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-0 border-2 border-dashed border-brand-blue/20 rounded-full" 
+                        className="absolute inset-0 border-2 border-dashed border-brand-blue/20 rounded-full"
                       />
-                      <motion.div 
+                      <motion.div
                         animate={{ scale: [1.1, 1, 1.1], rotate: -360 }}
                         transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-4 border border-dashed border-brand-orange/20 rounded-full" 
+                        className="absolute inset-4 border border-dashed border-brand-orange/20 rounded-full"
                       />
                       <div className="w-32 h-32 rounded-full bg-linear-to-br from-brand-blue to-brand-orange p-0.5 shadow-xl shadow-brand-blue/20">
                         <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
@@ -175,7 +176,7 @@ export const Hero = () => {
                       {/* Pulse rings */}
                       <div className="absolute inset-0 rounded-full border-2 border-brand-blue/10 animate-ping" />
                     </div>
-                    
+
                     <div className="flex items-end gap-1 h-8">
                       {[...Array(15)].map((_, i) => (
                         <motion.div
@@ -222,9 +223,9 @@ export const Hero = () => {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-blue/5 rounded-full blur-[100px] -z-10" />
             </div>
           </div>
-          
+
           {/* Floating elements */}
-          <motion.div 
+          <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="absolute -top-6 -right-6 glass p-4 rounded-2xl shadow-xl hidden md:block z-20"
@@ -242,7 +243,7 @@ export const Hero = () => {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             className="absolute -bottom-10 -left-10 glass p-6 rounded-2xl shadow-xl hidden md:block z-20 min-w-[240px]"

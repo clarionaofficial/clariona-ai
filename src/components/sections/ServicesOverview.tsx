@@ -37,7 +37,7 @@ export const ServicesOverview = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group p-8 rounded-2xl bg-brand-bg border border-brand-blue/5 hover:border-brand-blue/20 transition-all hover:shadow-xl hover:-translate-y-1"
+                className="group p-8 rounded-2xl bg-brand-bg border border-brand-blue/5 hover:border-brand-blue/20 transition-all hover:shadow-xl hover:-translate-y-1 hover:bg-brand-blue/[0.02]"
               >
                 <div className="w-14 h-14 rounded-xl bg-white flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
                   <Icon className="text-brand-blue" size={28} />
@@ -49,7 +49,7 @@ export const ServicesOverview = () => {
                 <ul className="space-y-3 mb-8">
                   {service.benefits.map((benefit: string) => (
                     <li key={benefit} className="flex items-center gap-2 text-sm text-brand-body">
-                      <div className="w-1.5 h-1.5 rounded-full bg-brand-orange" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-linear-to-br from-brand-orange to-brand-orange/60 shadow-[0_0_8px_rgba(255,176,122,0.4)]" />
                       {benefit}
                     </li>
                   ))}

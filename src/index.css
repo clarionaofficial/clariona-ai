@@ -8,17 +8,51 @@
   --color-brand-bg: #FAFBFF;
   --color-brand-heading: #0F172A;
   --color-brand-body: #334155;
-  
+
   --radius-xl: 12px;
   --radius-2xl: 16px;
+
+  --color-selection-bg: #6EC1FF66;
+  --color-selection-text: #0F172A;
 }
 
 @layer base {
+  ::selection {
+    background-color: var(--color-selection-bg);
+    color: var(--color-selection-text);
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #6EC1FF44;
+    border-radius: 5px;
+    border: 2px solid #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6EC1FF88;
+  }
+
+
+
   body {
     @apply bg-brand-bg text-brand-body font-sans antialiased;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply text-brand-heading font-semibold tracking-tight;
   }
 }
