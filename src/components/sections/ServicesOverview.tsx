@@ -16,7 +16,9 @@ export const ServicesOverview = () => {
   const services = getServices(t);
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 vibrant-bg-blue relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-96 h-96 bg-brand-orange/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-blue/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-brand-heading mb-4">
@@ -37,10 +39,10 @@ export const ServicesOverview = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group p-8 rounded-2xl bg-brand-bg border border-brand-blue/5 hover:border-brand-blue/20 transition-all hover:shadow-xl hover:-translate-y-1 hover:bg-brand-blue/[0.02]"
+                className="group p-8 rounded-2xl bg-white/60 backdrop-blur-sm border border-brand-blue/10 hover:border-brand-blue/30 transition-all hover:shadow-2xl hover:-translate-y-2 hover:bg-white"
               >
-                <div className="w-14 h-14 rounded-xl bg-white flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                  <Icon className="text-brand-blue" size={28} />
+                <div className="w-14 h-14 rounded-xl bg-brand-blue/5 border border-brand-blue/10 flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 group-hover:bg-brand-blue group-hover:text-white transition-all">
+                  <Icon className="group-hover:text-white transition-colors" size={28} />
                 </div>
                 <h3 className="text-xl font-bold text-brand-heading mb-4">{service.title}</h3>
                 <p className="text-brand-body text-sm mb-6 leading-relaxed">

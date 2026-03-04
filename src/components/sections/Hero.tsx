@@ -22,9 +22,10 @@ export const Hero = () => {
   return (
     <section className="relative pt-20 pb-32 overflow-hidden">
       {/* Background Accents */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10 opacity-30">
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-brand-blue/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[10%] right-[-5%] w-[400px] h-[400px] bg-brand-orange/20 rounded-full blur-[100px]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10 opacity-50">
+        <div className="absolute top-[-20%] left-[-20%] w-[600px] h-[600px] bg-brand-blue/30 rounded-full blur-[140px]" />
+        <div className="absolute bottom-[0%] right-[-10%] w-[500px] h-[500px] bg-brand-orange/30 rounded-full blur-[120px]" />
+        <div className="absolute top-[30%] left-[60%] w-[300px] h-[300px] bg-brand-blue/20 rounded-full blur-[100px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,7 +46,7 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-3xl md:text-5xl lg:text-6xl font-bold text-brand-heading mb-8 tracking-tight leading-[1.1]"
+              className="text-3xl md:text-5xl lg:text-6xl font-bold text-brand-heading mb-8 tracking-tight leading-[1.1] drop-shadow-[0_0_30px_rgba(110,193,255,0.2)]"
             >
               {t('hero.title')}
             </motion.h1>

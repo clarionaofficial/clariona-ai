@@ -65,6 +65,22 @@
   @apply bg-clip-text text-transparent bg-linear-to-r from-brand-blue to-brand-orange;
 }
 
+.vibrant-bg-blue {
+  @apply bg-linear-to-br from-brand-blue/10 via-white to-brand-blue/5;
+}
+
+.vibrant-bg-orange {
+  @apply bg-linear-to-br from-brand-orange/10 via-white to-brand-orange/5;
+}
+
+.brand-glass-blue {
+  @apply bg-brand-blue/10 backdrop-blur-lg border border-brand-blue/20 shadow-xl shadow-brand-blue/10;
+}
+
+.brand-glass-orange {
+  @apply bg-brand-orange/10 backdrop-blur-lg border border-brand-orange/20 shadow-xl shadow-brand-orange/10;
+}
+
 .btn-primary {
   @apply px-6 py-3 bg-brand-blue hover:bg-brand-blue/90 text-white rounded-xl font-medium transition-all shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center gap-2;
 }

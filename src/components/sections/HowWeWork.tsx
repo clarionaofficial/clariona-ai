@@ -8,7 +8,7 @@ export const HowWeWork = () => {
   const steps = getProcessSteps(t);
 
   return (
-    <section className="py-24 bg-brand-bg relative overflow-hidden">
+    <section className="py-24 vibrant-bg-orange relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-20">
           <h2 className="text-3xl md:text-4xl font-bold text-brand-heading mb-4">
@@ -21,7 +21,7 @@ export const HowWeWork = () => {
 
         <div className="relative">
           {/* Connector Line */}
-          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-linear-to-r from-brand-blue/20 via-brand-orange/20 to-brand-blue/20 -translate-y-1/2 hidden lg:block" />
+          <div className="absolute top-1/2 left-0 w-full h-1 bg-linear-to-r from-brand-blue/40 via-brand-orange/40 to-brand-blue/40 -translate-y-1/2 hidden lg:block" />
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12 lg:gap-8">
             {steps.map((step: any, index: number) => (
@@ -33,8 +33,8 @@ export const HowWeWork = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="relative flex flex-col items-center text-center group"
               >
-                <div className="relative w-16 h-16 rounded-full bg-white border-2 border-brand-blue/20 flex items-center justify-center text-brand-blue font-bold text-xl mb-6 z-10 group-hover:border-brand-blue group-hover:bg-brand-blue group-hover:text-white transition-all shadow-sm">
-                  <div className="absolute inset-0 rounded-full border border-brand-blue/20 animate-ping group-hover:hidden" />
+                <div className="relative w-16 h-16 rounded-full bg-brand-blue text-white border-2 border-white shadow-lg flex items-center justify-center font-bold text-xl mb-6 z-10 group-hover:scale-110 transition-all">
+                  <div className="absolute inset-0 rounded-full border-2 border-brand-blue/50 animate-ping group-hover:hidden" />
                   0{index + 1}
                 </div>
                 <h3 className="text-lg font-bold text-brand-heading mb-3">{step.title}</h3>
