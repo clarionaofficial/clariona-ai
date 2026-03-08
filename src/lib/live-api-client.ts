@@ -21,7 +21,7 @@ export class LiveAPIClient extends Emitter {
     }
 
     async connect() {
-        const url = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key=${this.config.apiKey}`;
+        const url = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=${this.config.apiKey}`;
 
         this.ws = new WebSocket(url);
 

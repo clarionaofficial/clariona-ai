@@ -23,12 +23,11 @@ export const useLiveAPI = () => {
 
         setStatus('listening');
 
-        if (!clientRef.current) {
-            clientRef.current = new LiveAPIClient({
-                apiKey,
-                model: 'gemini-2.0-flash-exp'
-            });
-        }
+        console.log('Starting session with model: gemini-2.0-flash');
+        clientRef.current = new LiveAPIClient({
+            apiKey,
+            model: 'gemini-2.0-flash'
+        });
 
         if (!audioManagerRef.current) {
             audioManagerRef.current = new AudioManager();
