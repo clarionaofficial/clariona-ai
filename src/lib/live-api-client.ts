@@ -24,26 +24,35 @@ export class LiveAPIClient extends Emitter {
         const url = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=${this.config.apiKey}`;
 
         this.ws = new WebSocket(url);
-        this.ws.binaryType = 'arraybuffer';
 
         return new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+                reject(new Error('Connection timeout'));
+            }, 10000);
+
             this.ws!.onopen = () => {
                 console.log('Connected to Gemini Live API');
                 this.sendSetupMessage();
-                resolve(true);
             };
+
+            this.on('setupComplete', () => {
+                clearTimeout(timeout);
+                resolve(true);
+            });
 
             this.ws!.onmessage = (event) => {
                 this.handleMessage(event);
             };
 
-            this.ws!.onclose = () => {
-                console.log('Disconnected from Gemini Live API');
+            this.ws!.onclose = (event) => {
+                console.log(`Disconnected from Gemini Live API. Code: ${event.code}, Reason: ${event.reason}`);
+                clearTimeout(timeout);
                 this.emit('close');
             };
 
             this.ws!.onerror = (error) => {
                 console.error('WebSocket Error:', error);
+                clearTimeout(timeout);
                 reject(error);
             };
         });
@@ -55,9 +64,13 @@ export class LiveAPIClient extends Emitter {
                 model: `models/${this.config.model}`,
                 generation_config: {
                     response_modalities: ["AUDIO"]
+                },
+                system_instruction: {
+                    parts: [{ text: "You are Clariona AI, a helpful voice assistant for Clariona AI agency. You help people with website building, GMB ranking, and AI voice agents. Keep responses concise and friendly for a voice conversation." }]
                 }
             }
         };
+        console.log('Sending setup message:', setupMessage);
         this.ws?.send(JSON.stringify(setupMessage));
     }
 
