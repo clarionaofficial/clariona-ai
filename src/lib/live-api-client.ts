@@ -63,20 +63,7 @@ export class LiveAPIClient extends Emitter {
             setup: {
                 model: `models/${this.config.model}`,
                 generation_config: {
-                    response_modalities: ["audio"],
-                    speech_config: {
-                        voice_config: {
-                            prebuilt_voice_config: {
-                                voice_name: "Puck"
-                            }
-                        }
-                    }
-                },
-                realtime_input_config: {
-                    automatic_activity_detection: {
-                        silence_duration_ms: 500,
-                        end_of_speech_sensitivity: 0.9
-                    }
+                    response_modalities: ["audio"]
                 },
                 system_instruction: {
                     parts: [{ text: "You are Clariona AI, a world-class, CONCISE voice-only assistant. CRITICAL VOICE-ONLY RULES: 1. NEVER include internal monologue, thinking steps, or planning. 2. NEVER start a response with headers or bold text like '**Acknowledge...**'. 3. SPEAK NORMALLY as if on a phone call. 4. DO NOT use markdown or any symbols. 5. KEEP RESPONSES TO 1-2 SHORT SENTENCES MAX. Be direct, helpful, and natural." }]
