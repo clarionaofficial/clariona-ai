@@ -74,7 +74,8 @@ export class LiveAPIClient extends Emitter {
                 },
                 realtime_input_config: {
                     automatic_activity_detection: {
-                        silence_duration_ms: 1000
+                        silence_duration_ms: 500,
+                        end_of_speech_sensitivity: 0.9
                     }
                 },
                 system_instruction: {
