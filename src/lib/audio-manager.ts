@@ -24,7 +24,7 @@ export class AudioManager {
             this.mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
             this.source = this.audioContext.createMediaStreamSource(this.mediaStream);
 
-            this.processor = this.audioContext.createScriptProcessor(4096, 1, 1);
+            this.processor = this.audioContext.createScriptProcessor(1024, 1, 1);
 
             this.source.connect(this.processor);
             this.processor.connect(this.audioContext.destination);
