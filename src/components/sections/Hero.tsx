@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Sparkles, Mic, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
@@ -162,24 +162,90 @@ export const Hero = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center w-full max-w-4xl">
                   {/* Left: Visualizer */}
                   <div className="flex flex-col items-center justify-center space-y-8">
-                    <div className="relative w-48 h-48 flex items-center justify-center">
+                    <div
+                      className="relative w-48 h-48 flex items-center justify-center cursor-pointer group/phone"
+                      onClick={() => setIsAgentOpen(true)}
+                    >
                       <motion.div
-                        animate={{ scale: [1, 1.1, 1], rotate: 360 }}
-                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-0 border-2 border-dashed border-brand-blue/20 rounded-full"
+                        animate={{
+                          scale: status === 'speaking' ? [1, 1.15, 1] : status === 'listening' ? [1, 1.05, 1] : 1,
+                          rotate: 360
+                        }}
+                        transition={{
+                          duration: status === 'speaking' ? 2 : 10,
+                          repeat: Infinity,
+                          ease: "linear"
+                        }}
+                        className={cn(
+                          "absolute inset-0 border-2 border-dashed rounded-full transition-colors duration-500",
+                          status === 'speaking' ? "border-brand-orange/40" :
+                            status === 'listening' ? "border-brand-blue/40" : "border-brand-blue/20"
+                        )}
                       />
                       <motion.div
-                        animate={{ scale: [1.1, 1, 1.1], rotate: -360 }}
-                        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-4 border border-dashed border-brand-orange/20 rounded-full"
+                        animate={{
+                          scale: status === 'speaking' ? [1.15, 1, 1.15] : status === 'listening' ? [1.05, 1, 1.05] : 1.1,
+                          rotate: -360
+                        }}
+                        transition={{
+                          duration: status === 'speaking' ? 3 : 15,
+                          repeat: Infinity,
+                          ease: "linear"
+                        }}
+                        className={cn(
+                          "absolute inset-4 border border-dashed rounded-full transition-colors duration-500",
+                          status === 'speaking' ? "border-brand-orange/30" :
+                            status === 'listening' ? "border-brand-blue/30" : "border-brand-orange/20"
+                        )}
                       />
-                      <div className="w-32 h-32 rounded-full bg-linear-to-br from-brand-blue to-brand-orange p-0.5 shadow-xl shadow-brand-blue/20">
-                        <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
-                          <Phone size={48} className="text-brand-blue" />
+
+                      {/* Pulse rings */}
+                      <AnimatePresence>
+                        {status !== 'idle' && (
+                          <>
+                            <motion.div
+                              initial={{ scale: 0.8, opacity: 0 }}
+                              animate={{ scale: 1.5, opacity: 0 }}
+                              transition={{ duration: 1.5, repeat: Infinity }}
+                              className={cn(
+                                "absolute inset-0 rounded-full border-2",
+                                status === 'speaking' ? "border-brand-orange/20" : "border-brand-blue/20"
+                              )}
+                            />
+                            <motion.div
+                              initial={{ scale: 0.8, opacity: 0 }}
+                              animate={{ scale: 2, opacity: 0 }}
+                              transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                              className={cn(
+                                "absolute inset-0 rounded-full border-2",
+                                status === 'speaking' ? "border-brand-orange/10" : "border-brand-blue/10"
+                              )}
+                            />
+                          </>
+                        )}
+                      </AnimatePresence>
+
+                      <div className={cn(
+                        "w-32 h-32 rounded-full p-0.5 shadow-xl transition-all duration-500 group-hover/phone:scale-110",
+                        status === 'speaking' ? "bg-linear-to-br from-brand-orange to-brand-blue shadow-brand-orange/30" :
+                          status === 'listening' ? "bg-linear-to-br from-brand-blue to-brand-orange shadow-brand-blue/30" :
+                            "bg-linear-to-br from-brand-blue to-brand-orange shadow-brand-blue/20"
+                      )}>
+                        <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden relative">
+                          <Phone size={48} className={cn(
+                            "transition-colors duration-500",
+                            status === 'speaking' ? "text-brand-orange" : "text-brand-blue"
+                          )} />
+
+                          {/* Status Overlay */}
+                          <div className={cn(
+                            "absolute inset-0 bg-white/40 flex items-center justify-center opacity-0 group-hover/phone:opacity-100 transition-opacity",
+                            status === 'idle' && "cursor-pointer"
+                          )}>
+                            <span className="text-[10px] font-bold text-brand-heading uppercase tracking-tighter">Talk Now</span>
+                          </div>
                         </div>
                       </div>
-                      {/* Pulse rings */}
-                      <div className="absolute inset-0 rounded-full border-2 border-brand-blue/10 animate-ping" />
                     </div>
 
                     <div className="flex items-end gap-1 h-8">
