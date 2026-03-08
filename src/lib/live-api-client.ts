@@ -63,7 +63,7 @@ export class LiveAPIClient extends Emitter {
             setup: {
                 model: `models/${this.config.model}`,
                 generation_config: {
-                    response_modalities: ["AUDIO"]
+                    response_modalities: ["audio"]
                 },
                 system_instruction: {
                     parts: [{ text: "You are Clariona AI, a helpful voice assistant for Clariona AI agency. You help people with website building, GMB ranking, and AI voice agents. Keep responses concise and friendly for a voice conversation." }]
