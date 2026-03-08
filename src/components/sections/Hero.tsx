@@ -298,7 +298,7 @@ export const Hero = () => {
                         <motion.div
                           key={i}
                           animate={{
-                            height: status === 'idle'
+                            height: status !== 'speaking'
                               ? 4
                               : [4, Math.random() * 24 + 4, 4]
                           }}

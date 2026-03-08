@@ -124,7 +124,7 @@ export const VoiceAgent = () => {
                       <motion.div
                         key={i}
                         animate={{
-                          height: status !== 'idle' ? [8, Math.random() * 32 + 8, 8] : 4
+                          height: status === 'speaking' ? [8, Math.random() * 32 + 8, 8] : 4
                         }}
                         transition={{
                           repeat: Infinity,
