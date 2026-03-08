@@ -2,10 +2,14 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Sparkles, Mic, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { cn } from '../../lib/utils';
 import { useLanguage } from '../../lib/LanguageContext';
+
+import { useVoice } from '../../lib/VoiceContext';
 
 export const Hero = () => {
   const { t } = useLanguage();
+  const { status, setIsAgentOpen } = useVoice();
   const [times, setTimes] = React.useState({ call: 2, appointment: 5, lead: 12 });
 
   React.useEffect(() => {
@@ -182,9 +186,21 @@ export const Hero = () => {
                       {[...Array(15)].map((_, i) => (
                         <motion.div
                           key={i}
-                          animate={{ height: [4, Math.random() * 24 + 4, 4] }}
-                          transition={{ repeat: Infinity, duration: 0.6, delay: i * 0.05 }}
-                          className="w-1 bg-brand-blue/30 rounded-full"
+                          animate={{
+                            height: status === 'idle'
+                              ? 4
+                              : [4, Math.random() * 24 + 4, 4]
+                          }}
+                          transition={{
+                            repeat: Infinity,
+                            duration: 0.6,
+                            delay: i * 0.05
+                          }}
+                          className={cn(
+                            "w-1 rounded-full transition-colors duration-500",
+                            status === 'speaking' ? "bg-brand-orange" :
+                              status === 'listening' ? "bg-brand-blue" : "bg-brand-blue/30"
+                          )}
                         />
                       ))}
                     </div>
@@ -201,9 +217,17 @@ export const Hero = () => {
                     </div>
 
                     <div className="flex flex-wrap gap-3">
-                      <div className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-wider border border-emerald-100 flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        {t('hero.onlineNow')}
+                      <div className={cn(
+                        "px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border flex items-center gap-2 transition-colors duration-500",
+                        status === 'idle'
+                          ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+                          : "bg-brand-blue/10 text-brand-blue border-brand-blue/20"
+                      )}>
+                        <div className={cn(
+                          "w-1.5 h-1.5 rounded-full animate-pulse",
+                          status === 'idle' ? "bg-emerald-500" : "bg-brand-blue"
+                        )} />
+                        {status === 'idle' ? t('hero.onlineNow') : t(`voiceAgent.status.${status}`)}
                       </div>
                       <div className="px-3 py-1.5 rounded-lg bg-brand-blue/5 text-brand-blue text-[10px] font-bold uppercase tracking-wider border border-brand-blue/10">
                         {t('hero.accuracy')}
@@ -211,7 +235,10 @@ export const Hero = () => {
                     </div>
 
                     <div className="pt-4">
-                      <button className="btn-primary w-full md:w-auto shadow-xl shadow-brand-blue/20 group">
+                      <button
+                        onClick={() => setIsAgentOpen(true)}
+                        className="btn-primary w-full md:w-auto shadow-xl shadow-brand-blue/20 group"
+                      >
                         <Mic size={18} className="group-hover:scale-110 transition-transform" />
                         {t('hero.demo')}
                       </button>

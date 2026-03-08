@@ -16,26 +16,30 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import { WebsitesPage, GMBPage, VoiceAgentsPage } from './pages/ServicePages';
 
+import { VoiceProvider } from './lib/VoiceContext';
+
 export default function App() {
   return (
     <Router>
-      <ScrollToTop />
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <div className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/websites" element={<WebsitesPage />} />
-            <Route path="/gmb-ranking" element={<GMBPage />} />
-            <Route path="/voice-agents" element={<VoiceAgentsPage />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
+      <VoiceProvider>
+        <ScrollToTop />
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
+          <div className="flex-1">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/websites" element={<WebsitesPage />} />
+              <Route path="/gmb-ranking" element={<GMBPage />} />
+              <Route path="/voice-agents" element={<VoiceAgentsPage />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+            </Routes>
+          </div>
+          <Footer />
+          <VoiceAgent />
         </div>
-        <Footer />
-        <VoiceAgent />
-      </div>
+      </VoiceProvider>
     </Router>
   );
 }

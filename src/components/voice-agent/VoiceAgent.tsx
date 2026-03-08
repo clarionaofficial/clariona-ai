@@ -6,11 +6,18 @@ import { useLanguage } from '../../lib/LanguageContext';
 
 import { useLiveAPI } from '../../lib/use-live-api';
 
+import { useVoice } from '../../lib/VoiceContext';
+
 export const VoiceAgent = () => {
   const { t } = useLanguage();
-  const [isOpen, setIsOpen] = React.useState(false);
+  const { isAgentOpen, setIsAgentOpen, setStatus: setGlobalStatus } = useVoice();
   const { status, transcript, startSession, stopSession } = useLiveAPI();
   const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  // Sync internal status to global context
+  React.useEffect(() => {
+    setGlobalStatus(status);
+  }, [status, setGlobalStatus]);
 
   React.useEffect(() => {
     if (scrollRef.current) {
@@ -32,7 +39,7 @@ export const VoiceAgent = () => {
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(true)}
+        onClick={() => setIsAgentOpen(true)}
         className="fixed bottom-8 right-8 z-40 flex items-center gap-3 bg-brand-heading text-white px-6 py-4 rounded-full shadow-2xl hover:shadow-brand-blue/20 transition-all border border-white/10"
       >
         <div className="relative">
@@ -44,13 +51,13 @@ export const VoiceAgent = () => {
 
       {/* Modal */}
       <AnimatePresence>
-        {isOpen && (
+        {isAgentOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
+              onClick={() => setIsAgentOpen(false)}
               className="absolute inset-0 bg-brand-heading/40 backdrop-blur-sm"
             />
 
@@ -80,7 +87,7 @@ export const VoiceAgent = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => setIsAgentOpen(false)}
                   className="p-2 hover:bg-white rounded-full transition-colors text-brand-body"
                 >
                   <X size={20} />
