@@ -11,9 +11,16 @@ export class AudioManager {
     private sampleRate = 16000;
     private outSampleRate = 24000;
 
+    private nextStartTime = 0;
+    private isPlaying = false;
+
     async startRecording(onAudioData: (base64: string) => void) {
         try {
-            this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: this.sampleRate });
+            if (!this.audioContext || this.audioContext.state === 'closed') {
+                this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: this.sampleRate });
+            }
+            await this.audioContext.resume();
+
             this.mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
             this.source = this.audioContext.createMediaStreamSource(this.mediaStream);
 
@@ -53,18 +60,20 @@ export class AudioManager {
         this.processor?.disconnect();
         this.source?.disconnect();
         this.mediaStream?.getTracks().forEach(track => track.stop());
-        this.audioContext?.close();
 
         this.processor = null;
         this.source = null;
         this.mediaStream = null;
-        this.audioContext = null;
         console.log('Recording stopped');
     }
 
     async playAudio(base64Data: string) {
-        if (!this.audioContext) {
+        if (!this.audioContext || this.audioContext.state === 'closed') {
             this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: this.outSampleRate });
+        }
+
+        if (this.audioContext.state === 'suspended') {
+            await this.audioContext.resume();
         }
 
         try {
@@ -86,7 +95,15 @@ export class AudioManager {
             const source = this.audioContext.createBufferSource();
             source.buffer = buffer;
             source.connect(this.audioContext.destination);
-            source.start();
+
+            const currentTime = this.audioContext.currentTime;
+            if (this.nextStartTime < currentTime) {
+                this.nextStartTime = currentTime + 0.05; // Small buffer for initial chunk
+            }
+
+            source.start(this.nextStartTime);
+            this.nextStartTime += buffer.duration;
+            this.isPlaying = true;
         } catch (e) {
             console.error('Error playing audio chunk:', e);
         }
