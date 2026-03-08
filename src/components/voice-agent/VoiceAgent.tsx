@@ -49,38 +49,30 @@ export const VoiceAgent = () => {
         <span className="font-semibold">{t('voiceAgent.button')}</span>
       </motion.button>
 
-      {/* Modal */}
+      {/* Assistant Dock */}
       <AnimatePresence>
         {isAgentOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed bottom-24 right-8 z-50 pointer-events-none">
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsAgentOpen(false)}
-              className="absolute inset-0 bg-brand-heading/40 backdrop-blur-sm"
-            />
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-white rounded-[32px] shadow-2xl overflow-hidden flex flex-col h-[600px]"
+              initial={{ opacity: 0, scale: 0.9, y: 40, x: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 40, x: 20 }}
+              className="relative w-[380px] bg-white rounded-[24px] shadow-2xl overflow-hidden flex flex-col h-[500px] border border-brand-blue/10 pointer-events-auto"
             >
               {/* Header */}
-              <div className="p-6 border-b border-brand-blue/10 flex items-center justify-between bg-brand-bg">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-brand-heading flex items-center justify-center text-white shadow-lg">
-                    <Mic size={24} />
+              <div className="p-4 border-b border-brand-blue/10 flex items-center justify-between bg-brand-bg/50 backdrop-blur-md">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-brand-heading flex items-center justify-center text-white shadow-lg">
+                    <Mic size={20} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-brand-heading">{t('voiceAgent.modalTitle')}</h3>
+                    <h3 className="font-bold text-sm text-brand-heading">{t('voiceAgent.modalTitle')}</h3>
                     <div className="flex items-center gap-2">
                       <span className={cn(
-                        "w-2 h-2 rounded-full",
+                        "w-1.5 h-1.5 rounded-full",
                         status === 'idle' ? "bg-gray-400" : "bg-emerald-500 animate-pulse"
                       )} />
-                      <span className="text-xs font-medium text-brand-body uppercase tracking-wider">
+                      <span className="text-[10px] font-bold text-brand-body uppercase tracking-wider">
                         {t(`voiceAgent.status.${status}`)}
                       </span>
                     </div>
@@ -88,33 +80,33 @@ export const VoiceAgent = () => {
                 </div>
                 <button
                   onClick={() => setIsAgentOpen(false)}
-                  className="p-2 hover:bg-white rounded-full transition-colors text-brand-body"
+                  className="p-1.5 hover:bg-gray-100 rounded-full transition-colors text-brand-body"
                 >
-                  <X size={20} />
+                  <X size={18} />
                 </button>
               </div>
 
               {/* Transcript */}
               <div
                 ref={scrollRef}
-                className="flex-1 overflow-y-auto p-6 space-y-4 bg-brand-bg/30"
+                className="flex-1 overflow-y-auto p-4 space-y-3 bg-brand-bg/20"
               >
                 {transcript.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center opacity-40">
-                    <MessageSquare size={48} className="mb-4 text-brand-blue" />
-                    <p className="text-sm">{t('voiceAgent.idleDesc')}</p>
+                  <div className="h-full flex flex-col items-center justify-center text-center opacity-40 px-8">
+                    <MessageSquare size={32} className="mb-3 text-brand-blue" />
+                    <p className="text-xs">{t('voiceAgent.idleDesc')}</p>
                   </div>
                 ) : (
                   transcript.map((msg, i) => (
                     <motion.div
-                      initial={{ opacity: 0, x: msg.role === 'user' ? 20 : -20 }}
-                      animate={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
                       key={i}
                       className={cn(
-                        "max-w-[80%] p-4 rounded-2xl text-sm leading-relaxed",
+                        "max-w-[85%] p-3 rounded-xl text-xs leading-relaxed",
                         msg.role === 'user'
-                          ? "ml-auto bg-brand-blue text-white rounded-tr-none"
-                          : "bg-white border border-brand-blue/10 text-brand-body rounded-tl-none shadow-sm"
+                          ? "ml-auto bg-brand-blue text-white rounded-tr-none shadow-sm"
+                          : "bg-white border border-brand-blue/5 text-brand-body rounded-tl-none shadow-xs"
                       )}
                     >
                       {msg.text}
@@ -124,44 +116,46 @@ export const VoiceAgent = () => {
               </div>
 
               {/* Visualization & Controls */}
-              <div className="p-8 border-t border-brand-blue/10 bg-white">
-                <div className="flex flex-col items-center gap-8">
+              <div className="p-6 border-t border-brand-blue/10 bg-white shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)]">
+                <div className="flex flex-col items-center gap-6">
                   {/* Volume Visualization */}
-                  <div className="flex items-end gap-1 h-12">
-                    {[...Array(12)].map((_, i) => (
+                  <div className="flex items-end gap-1 h-10">
+                    {[...Array(15)].map((_, i) => (
                       <motion.div
                         key={i}
                         animate={{
-                          height: status !== 'idle' ? [10, Math.random() * 40 + 10, 10] : 4
+                          height: status !== 'idle' ? [8, Math.random() * 32 + 8, 8] : 4
                         }}
                         transition={{
                           repeat: Infinity,
                           duration: 0.5,
-                          delay: i * 0.05
+                          delay: i * 0.03
                         }}
                         className={cn(
-                          "w-1.5 rounded-full transition-colors",
+                          "w-1 rounded-full transition-colors",
                           status === 'speaking' ? "bg-brand-orange" :
-                            status === 'listening' ? "bg-brand-blue" : "bg-gray-200"
+                            status === 'listening' ? "bg-brand-blue" : "bg-gray-100"
                         )}
                       />
                     ))}
                   </div>
 
-                  <button
-                    onClick={toggleSession}
-                    className={cn(
-                      "w-20 h-20 rounded-full flex items-center justify-center transition-all shadow-xl active:scale-90",
-                      status === 'idle'
-                        ? "bg-brand-blue text-white hover:bg-brand-blue/90"
-                        : "bg-red-500 text-white hover:bg-red-600"
-                    )}
-                  >
-                    {status === 'idle' ? <Play size={32} fill="currentColor" /> : <Square size={32} fill="currentColor" />}
-                  </button>
+                  <div className="flex items-center gap-4 w-full justify-center">
+                    <button
+                      onClick={toggleSession}
+                      className={cn(
+                        "w-14 h-14 rounded-full flex items-center justify-center transition-all shadow-lg active:scale-95 group/btn",
+                        status === 'idle'
+                          ? "bg-brand-blue text-white hover:bg-brand-blue/90"
+                          : "bg-red-500 text-white hover:bg-red-600"
+                      )}
+                    >
+                      {status === 'idle' ? <Play size={24} fill="currentColor" className="ml-1" /> : <Square size={24} fill="currentColor" />}
+                    </button>
+                  </div>
 
-                  <p className="text-xs text-brand-body font-medium flex items-center gap-2">
-                    <Volume2 size={14} />
+                  <p className="text-[10px] text-brand-body/60 font-medium flex items-center gap-1.5 uppercase tracking-widest">
+                    <Volume2 size={12} />
                     {t('voiceAgent.poweredBy')}
                   </p>
                 </div>
