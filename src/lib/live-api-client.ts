@@ -90,9 +90,13 @@ export class LiveAPIClient extends Emitter {
         }
     }
 
-    private handleMessage(event: MessageEvent) {
+    private async handleMessage(event: MessageEvent) {
         try {
-            const message = JSON.parse(event.data);
+            let data = event.data;
+            if (data instanceof Blob) {
+                data = await data.text();
+            }
+            const message = JSON.parse(data);
             console.log('Gemini Message:', message);
 
             if (message.serverContent?.modelTurn?.parts) {
