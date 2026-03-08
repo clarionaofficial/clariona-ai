@@ -11,7 +11,8 @@ export const FAQSection = () => {
   const [openIndex, setOpenIndex] = React.useState<number | null>(0);
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-minimalist-blue relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-96 h-96 bg-brand-blue/5 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2" />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-brand-heading mb-4">
@@ -27,8 +28,8 @@ export const FAQSection = () => {
             <div
               key={index}
               className={cn(
-                "border rounded-2xl overflow-hidden transition-all duration-300",
-                openIndex === index ? "border-brand-blue/30 shadow-sm" : "border-brand-blue/10"
+                "border rounded-2xl overflow-hidden transition-all duration-300 bg-white minimalist-shadow",
+                openIndex === index ? "border-brand-blue/30 scale-[1.02]" : "border-slate-100"
               )}
             >
               <button

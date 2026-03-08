@@ -8,7 +8,7 @@ export const HowWeWork = () => {
   const steps = getProcessSteps(t);
 
   return (
-    <section className="py-24 vibrant-bg-orange relative overflow-hidden">
+    <section className="py-24 bg-minimalist-blue relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-20">
           <h2 className="text-3xl md:text-4xl font-bold text-brand-heading mb-4">

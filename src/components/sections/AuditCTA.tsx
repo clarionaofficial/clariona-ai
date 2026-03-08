@@ -10,7 +10,7 @@ export const AuditCTA = () => {
   return (
     <section className="py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-[32px] overflow-hidden bg-linear-to-br from-brand-blue to-brand-orange p-8 md:p-16 text-center shadow-2xl shadow-brand-blue/20">
+        <div className="relative rounded-[48px] overflow-hidden bg-linear-to-br from-brand-blue to-brand-orange p-8 md:p-16 text-center shadow-2xl shadow-brand-blue/10">
           {/* Background decoration */}
           <div className="absolute top-0 right-0 w-1/2 h-full bg-white/10 pointer-events-none skew-x-12 translate-x-32" />
           <div className="absolute bottom-0 left-0 w-1/2 h-full bg-white/10 pointer-events-none -skew-x-12 -translate-x-32" />

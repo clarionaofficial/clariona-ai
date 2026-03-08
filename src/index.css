@@ -9,9 +9,10 @@
   --color-brand-heading: #0F172A;
   --color-brand-body: #334155;
 
-  --radius-xl: 12px;
-  --radius-2xl: 16px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
 
+  --color-minimalist-bg: #F8FAFC;
   --color-service-1: #E1F1FF;
   --color-service-2: #FFF0E5;
   --color-service-3: #E8F7F2;
@@ -67,6 +68,14 @@
 
 .gradient-text {
   @apply bg-clip-text text-transparent bg-linear-to-r from-brand-blue to-brand-orange;
+}
+
+.bg-minimalist-blue {
+  background-color: var(--color-minimalist-bg);
+}
+
+.minimalist-shadow {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.04), 0 4px 6px -4px rgb(0 0 0 / 0.02);
 }
 
 .vibrant-bg-blue {
