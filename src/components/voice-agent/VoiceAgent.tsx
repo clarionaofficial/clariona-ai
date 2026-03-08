@@ -188,30 +188,7 @@ export const VoiceAgent = () => {
                   </div>
                 </div>
 
-                {/* Live Caption Area */}
-                <div className="w-full text-center px-6 min-h-[60px] flex items-center justify-center">
-                  <AnimatePresence mode="wait">
-                    {transcript.length > 0 ? (
-                      <motion.p
-                        key={transcript[transcript.length - 1].text}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="text-sm font-medium text-brand-heading leading-tight italic"
-                      >
-                        "{transcript[transcript.length - 1].text}"
-                      </motion.p>
-                    ) : (
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.5 }}
-                        className="text-xs text-brand-body uppercase tracking-widest font-bold"
-                      >
-                        {t('voiceAgent.idleDesc')}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
+                {/* Visualization block is enough, removed transcript/caption logic */}
               </div>
 
               {/* Controls Overlay */}
