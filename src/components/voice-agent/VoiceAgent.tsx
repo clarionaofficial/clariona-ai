@@ -86,78 +86,157 @@ export const VoiceAgent = () => {
                 </button>
               </div>
 
-              {/* Transcript */}
-              <div
-                ref={scrollRef}
-                className="flex-1 overflow-y-auto p-4 space-y-3 bg-brand-bg/20"
-              >
-                {transcript.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center opacity-40 px-8">
-                    <MessageSquare size={32} className="mb-3 text-brand-blue" />
-                    <p className="text-xs">{t('voiceAgent.idleDesc')}</p>
-                  </div>
-                ) : (
-                  transcript.map((msg, i) => (
+              {/* Main Visualization Area */}
+              <div className="flex-1 flex flex-col items-center justify-center p-8 bg-brand-bg/20 relative overflow-hidden">
+                {/* Background Glow */}
+                <AnimatePresence>
+                  {status !== 'idle' && (
                     <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      key={i}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{
+                        opacity: [0.1, 0.2, 0.1],
+                        scale: [1, 1.1, 1],
+                      }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                       className={cn(
-                        "max-w-[85%] p-3 rounded-xl text-xs leading-relaxed",
-                        msg.role === 'user'
-                          ? "ml-auto bg-brand-blue text-white rounded-tr-none shadow-sm"
-                          : "bg-white border border-brand-blue/5 text-brand-body rounded-tl-none shadow-xs"
+                        "absolute inset-0 blur-[80px] -z-10",
+                        status === 'speaking' ? "bg-brand-orange/30" : "bg-brand-blue/30"
                       )}
-                    >
-                      {msg.text}
-                    </motion.div>
-                  ))
-                )}
-              </div>
+                    />
+                  )}
+                </AnimatePresence>
 
-              {/* Visualization & Controls */}
-              <div className="p-6 border-t border-brand-blue/10 bg-white shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)]">
-                <div className="flex flex-col items-center gap-6">
-                  {/* Volume Visualization */}
-                  <div className="flex items-end gap-1 h-10">
-                    {[...Array(15)].map((_, i) => (
+                {/* Central AI Orb */}
+                <div className="relative w-48 h-48 flex items-center justify-center mb-8">
+                  {/* Outer Ring */}
+                  <motion.div
+                    animate={{
+                      scale: status === 'speaking' ? [1, 1.1, 1] : 1,
+                      rotate: 360
+                    }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                    className={cn(
+                      "absolute inset-0 border border-dashed rounded-full opacity-20",
+                      status === 'speaking' ? "border-brand-orange" : "border-brand-blue"
+                    )}
+                  />
+
+                  {/* The Orb */}
+                  <motion.div
+                    animate={{
+                      scale: status === 'speaking' ? [1, 1.2, 1] : status === 'listening' ? [1, 1.05, 1] : 1,
+                      boxShadow: status === 'speaking'
+                        ? '0 0 40px rgba(245, 158, 11, 0.4)'
+                        : status === 'listening'
+                          ? '0 0 40px rgba(59, 130, 246, 0.4)'
+                          : '0 0 20px rgba(59, 130, 246, 0.2)'
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className={cn(
+                      "w-32 h-32 rounded-full relative z-10 flex items-center justify-center overflow-hidden transition-colors duration-500",
+                      status === 'speaking'
+                        ? "bg-linear-to-br from-brand-orange to-brand-blue"
+                        : "bg-linear-to-br from-brand-blue to-brand-orange"
+                    )}
+                  >
+                    <div className="absolute inset-0.5 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                      <Mic
+                        size={40}
+                        className={cn(
+                          "transition-colors duration-500",
+                          status === 'speaking' ? "text-brand-orange" : "text-brand-blue"
+                        )}
+                      />
+
+                      {/* Pulse Overlay */}
+                      <AnimatePresence>
+                        {status !== 'idle' && (
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 0.2, 0] }}
+                            transition={{ duration: 1, repeat: Infinity }}
+                            className={cn(
+                              "absolute inset-0",
+                              status === 'speaking' ? "bg-brand-orange" : "bg-brand-blue"
+                            )}
+                          />
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </motion.div>
+
+                  {/* Volume Bars (Integrated) */}
+                  <div className="absolute -bottom-4 flex items-end gap-1 h-8 px-4 py-1 bg-white/80 backdrop-blur-sm rounded-full border border-brand-blue/10 shadow-sm">
+                    {[...Array(12)].map((_, i) => (
                       <motion.div
                         key={i}
                         animate={{
-                          height: status === 'speaking' ? [8, Math.random() * 32 + 8, 8] : 4
+                          height: status === 'speaking' ? [4, Math.random() * 16 + 4, 4] : 4
                         }}
                         transition={{
                           repeat: Infinity,
                           duration: 0.5,
-                          delay: i * 0.03
+                          delay: i * 0.04
                         }}
                         className={cn(
                           "w-1 rounded-full transition-colors",
-                          status === 'speaking' ? "bg-brand-orange" :
-                            status === 'listening' ? "bg-brand-blue" : "bg-gray-100"
+                          status === 'speaking' ? "bg-brand-orange" : "bg-brand-blue/30"
                         )}
                       />
                     ))}
                   </div>
+                </div>
 
-                  <div className="flex items-center gap-4 w-full justify-center">
+                {/* Live Caption Area */}
+                <div className="w-full text-center px-6 min-h-[60px] flex items-center justify-center">
+                  <AnimatePresence mode="wait">
+                    {transcript.length > 0 ? (
+                      <motion.p
+                        key={transcript[transcript.length - 1].text}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="text-sm font-medium text-brand-heading leading-tight italic"
+                      >
+                        "{transcript[transcript.length - 1].text}"
+                      </motion.p>
+                    ) : (
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 0.5 }}
+                        className="text-xs text-brand-body uppercase tracking-widest font-bold"
+                      >
+                        {t('voiceAgent.idleDesc')}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+
+              {/* Controls Overlay */}
+              <div className="p-8 border-t border-brand-blue/10 bg-white">
+                <div className="flex flex-col items-center gap-6">
+                  <div className="flex items-center gap-6">
                     <button
                       onClick={toggleSession}
                       className={cn(
-                        "w-14 h-14 rounded-full flex items-center justify-center transition-all shadow-lg active:scale-95 group/btn",
+                        "w-16 h-16 rounded-full flex items-center justify-center transition-all shadow-xl active:scale-95 group/btn border-4 border-white",
                         status === 'idle'
-                          ? "bg-brand-blue text-white hover:bg-brand-blue/90"
-                          : "bg-red-500 text-white hover:bg-red-600"
+                          ? "bg-brand-blue text-white hover:bg-brand-blue/90 shadow-brand-blue/20"
+                          : "bg-red-500 text-white hover:bg-red-600 shadow-red-500/20"
                       )}
                     >
-                      {status === 'idle' ? <Play size={24} fill="currentColor" className="ml-1" /> : <Square size={24} fill="currentColor" />}
+                      {status === 'idle' ? <Play size={28} fill="currentColor" className="ml-1" /> : <Square size={24} fill="currentColor" />}
                     </button>
                   </div>
 
-                  <p className="text-[10px] text-brand-body/60 font-medium flex items-center gap-1.5 uppercase tracking-widest">
-                    <Volume2 size={12} />
-                    {t('voiceAgent.poweredBy')}
-                  </p>
+                  <div className="flex flex-col items-center gap-2">
+                    <p className="text-[10px] text-brand-body/40 font-bold flex items-center gap-2 uppercase tracking-[0.2em]">
+                      <Volume2 size={12} />
+                      {t('voiceAgent.poweredBy')}
+                    </p>
+                  </div>
                 </div>
               </div>
             </motion.div>
