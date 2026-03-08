@@ -21,29 +21,12 @@ export const useLiveAPI = () => {
             return;
         }
 
-        // Diagnostic: List allowed models
-        try {
-            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-            const data = await resp.json();
-            console.log('Available Models:', data.models?.map((m: any) => ({
-                name: m.name,
-                methods: m.supportedGenerationMethods
-            })));
-
-            const liveModels = data.models?.filter((m: any) =>
-                m.supportedGenerationMethods?.includes('bidiGenerateContent')
-            );
-            console.log('Models supporting bidiGenerateContent:', liveModels?.map((m: any) => m.name));
-        } catch (e) {
-            console.error('Failed to list models:', e);
-        }
-
         setStatus('listening');
 
-        console.log('Starting session with model: gemini-2.0-flash');
+        console.log('Starting session with model: gemini-2.5-flash-native-audio-latest');
         clientRef.current = new LiveAPIClient({
             apiKey,
-            model: 'gemini-2.0-flash'
+            model: 'gemini-2.5-flash-native-audio-latest'
         });
 
         if (!audioManagerRef.current) {
