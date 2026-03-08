@@ -1,11 +1,17 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+class Emitter {
+    private listeners: { [key: string]: Function[] } = {};
 
-import { EventEmitter } from 'events';
+    on(event: string, fn: Function) {
+        this.listeners[event] = this.listeners[event] || [];
+        this.listeners[event].push(fn);
+    }
 
-export class LiveAPIClient extends EventEmitter {
+    emit(event: string, ...args: any[]) {
+        (this.listeners[event] || []).forEach(fn => fn(...args));
+    }
+}
+
+export class LiveAPIClient extends Emitter {
     private ws: WebSocket | null = null;
     private config: any;
 
