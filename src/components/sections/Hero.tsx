@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'motion/react';
 import { ArrowRight, Sparkles, Mic, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
@@ -11,6 +11,26 @@ export const Hero = () => {
   const { t } = useLanguage();
   const { status, setIsAgentOpen } = useVoice();
   const [times, setTimes] = React.useState({ call: 2, appointment: 5, lead: 12 });
+
+  // Parallax Values
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const rotateX = useSpring(useTransform(mouseY, [-300, 300], [15, -15]), { stiffness: 150, damping: 25 });
+  const rotateY = useSpring(useTransform(mouseX, [-300, 300], [-15, 15]), { stiffness: 150, damping: 25 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    mouseX.set(e.clientX - centerX);
+    mouseY.set(e.clientY - centerY);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -161,91 +181,116 @@ export const Hero = () => {
               <div className="flex-1 flex items-center justify-center p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center w-full max-w-4xl">
                   {/* Left: Visualizer */}
-                  <div className="flex flex-col items-center justify-center space-y-8">
+                  <div className="flex flex-col items-center justify-center space-y-8 relative">
+                    {/* Background Energy Aura */}
+                    <AnimatePresence>
+                      {status !== 'idle' && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{
+                            opacity: [0.3, 0.6, 0.3],
+                            scale: [1, 1.2, 1],
+                          }}
+                          exit={{ opacity: 0, scale: 0.8 }}
+                          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                          className={cn(
+                            "absolute w-72 h-72 rounded-full blur-[60px] -z-10",
+                            status === 'speaking' ? "bg-brand-orange/40" : "bg-brand-blue/40"
+                          )}
+                        />
+                      )}
+                    </AnimatePresence>
                     <div
                       className="relative w-48 h-48 flex items-center justify-center cursor-pointer group/phone"
                       onClick={() => setIsAgentOpen(true)}
                     >
                       <motion.div
-                        animate={{
-                          scale: status === 'speaking' ? [1, 1.15, 1] : status === 'listening' ? [1, 1.05, 1] : 1,
-                          rotate: 360
-                        }}
-                        transition={{
-                          duration: status === 'speaking' ? 2 : 10,
-                          repeat: Infinity,
-                          ease: "linear"
-                        }}
-                        className={cn(
-                          "absolute inset-0 border-2 border-dashed rounded-full transition-colors duration-500",
-                          status === 'speaking' ? "border-brand-orange/40" :
-                            status === 'listening' ? "border-brand-blue/40" : "border-brand-blue/20"
-                        )}
-                      />
-                      <motion.div
-                        animate={{
-                          scale: status === 'speaking' ? [1.15, 1, 1.15] : status === 'listening' ? [1.05, 1, 1.05] : 1.1,
-                          rotate: -360
-                        }}
-                        transition={{
-                          duration: status === 'speaking' ? 3 : 15,
-                          repeat: Infinity,
-                          ease: "linear"
-                        }}
-                        className={cn(
-                          "absolute inset-4 border border-dashed rounded-full transition-colors duration-500",
-                          status === 'speaking' ? "border-brand-orange/30" :
-                            status === 'listening' ? "border-brand-blue/30" : "border-brand-orange/20"
-                        )}
-                      />
+                        style={{ rotateX, rotateY, perspective: 1000 }}
+                        onMouseMove={handleMouseMove}
+                        onMouseLeave={handleMouseLeave}
+                        className="relative w-full h-full flex items-center justify-center"
+                      >
+                        <motion.div
+                          animate={{
+                            scale: status === 'speaking' ? [1, 1.15, 1] : status === 'listening' ? [1, 1.05, 1] : 1,
+                            rotate: 360
+                          }}
+                          transition={{
+                            duration: status === 'speaking' ? 2 : 10,
+                            repeat: Infinity,
+                            ease: "linear"
+                          }}
+                          className={cn(
+                            "absolute inset-0 border-2 border-dashed rounded-full transition-colors duration-500",
+                            status === 'speaking' ? "border-brand-orange/40" :
+                              status === 'listening' ? "border-brand-blue/40" : "border-brand-blue/20"
+                          )}
+                        />
+                        <motion.div
+                          animate={{
+                            scale: status === 'speaking' ? [1.15, 1, 1.15] : status === 'listening' ? [1.05, 1, 1.05] : 1.1,
+                            rotate: -360
+                          }}
+                          transition={{
+                            duration: status === 'speaking' ? 3 : 15,
+                            repeat: Infinity,
+                            ease: "linear"
+                          }}
+                          className={cn(
+                            "absolute inset-4 border border-dashed rounded-full transition-colors duration-500",
+                            status === 'speaking' ? "border-brand-orange/30" :
+                              status === 'listening' ? "border-brand-blue/30" : "border-brand-orange/20"
+                          )}
+                        />
 
-                      {/* Pulse rings */}
-                      <AnimatePresence>
-                        {status !== 'idle' && (
-                          <>
-                            <motion.div
-                              initial={{ scale: 0.8, opacity: 0 }}
-                              animate={{ scale: 1.5, opacity: 0 }}
-                              transition={{ duration: 1.5, repeat: Infinity }}
-                              className={cn(
-                                "absolute inset-0 rounded-full border-2",
-                                status === 'speaking' ? "border-brand-orange/20" : "border-brand-blue/20"
-                              )}
-                            />
-                            <motion.div
-                              initial={{ scale: 0.8, opacity: 0 }}
-                              animate={{ scale: 2, opacity: 0 }}
-                              transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                              className={cn(
-                                "absolute inset-0 rounded-full border-2",
-                                status === 'speaking' ? "border-brand-orange/10" : "border-brand-blue/10"
-                              )}
-                            />
-                          </>
-                        )}
-                      </AnimatePresence>
+                        {/* Pulse rings */}
+                        <AnimatePresence>
+                          {status !== 'idle' && (
+                            <>
+                              <motion.div
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: [0.8, 1.8], opacity: [0.4, 0] }}
+                                transition={{ duration: 1.5, repeat: Infinity }}
+                                className={cn(
+                                  "absolute inset-0 rounded-full border-2",
+                                  status === 'speaking' ? "border-brand-orange/30" : "border-brand-blue/30"
+                                )}
+                              />
+                              <motion.div
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: [0.8, 2.4], opacity: [0.2, 0] }}
+                                transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                                className={cn(
+                                  "absolute inset-0 rounded-full border-2",
+                                  status === 'speaking' ? "border-brand-orange/20" : "border-brand-blue/20"
+                                )}
+                              />
+                            </>
+                          )}
+                        </AnimatePresence>
 
-                      <div className={cn(
-                        "w-32 h-32 rounded-full p-0.5 shadow-xl transition-all duration-500 group-hover/phone:scale-110",
-                        status === 'speaking' ? "bg-linear-to-br from-brand-orange to-brand-blue shadow-brand-orange/30" :
-                          status === 'listening' ? "bg-linear-to-br from-brand-blue to-brand-orange shadow-brand-blue/30" :
-                            "bg-linear-to-br from-brand-blue to-brand-orange shadow-brand-blue/20"
-                      )}>
-                        <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden relative">
-                          <Phone size={48} className={cn(
-                            "transition-colors duration-500",
-                            status === 'speaking' ? "text-brand-orange" : "text-brand-blue"
-                          )} />
+                        <div className={cn(
+                          "w-32 h-32 rounded-full p-0.5 shadow-xl transition-all duration-500 group-hover/phone:scale-110",
+                          status === 'speaking' ? "bg-linear-to-br from-brand-orange to-brand-blue shadow-brand-orange/30" :
+                            status === 'listening' ? "bg-linear-to-br from-brand-blue to-brand-orange shadow-brand-blue/30" :
+                              "bg-linear-to-br from-brand-blue to-brand-orange shadow-brand-blue/20"
+                        )}>
+                          <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden relative">
+                            <Phone size={48} className={cn(
+                              "transition-colors duration-500",
+                              status === 'speaking' ? "text-brand-orange" : "text-brand-blue"
+                            )} />
 
-                          {/* Status Overlay */}
-                          <div className={cn(
-                            "absolute inset-0 bg-white/40 flex items-center justify-center opacity-0 group-hover/phone:opacity-100 transition-opacity",
-                            status === 'idle' && "cursor-pointer"
-                          )}>
-                            <span className="text-[10px] font-bold text-brand-heading uppercase tracking-tighter">Talk Now</span>
+                            {/* Status Overlay */}
+                            <div className={cn(
+                              "absolute inset-0 bg-white/40 flex items-center justify-center opacity-0 group-hover/phone:opacity-100 transition-opacity",
+                              status === 'idle' && "cursor-pointer"
+                            )}>
+                              <span className="text-[10px] font-bold text-brand-heading uppercase tracking-tighter">Talk Now</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </motion.div>
                     </div>
 
                     <div className="flex items-end gap-1 h-8">
