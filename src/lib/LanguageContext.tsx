@@ -75,9 +75,9 @@ const translations: any = {
       idleDesc: 'Click start to begin a conversation with our AI agent.',
       poweredBy: 'Powered by Clariona Voice Engine',
       status: {
-        idle: 'Idle',
+        idle: 'Online',
         listening: 'Listening',
-        speaking: 'Speaking'
+        speaking: 'Talking'
       }
     },
     activity: {
@@ -299,7 +299,7 @@ const translations: any = {
       idleDesc: 'Klicken Sie auf Start, um ein Gespräch mit unserem AI-Agenten zu beginnen.',
       poweredBy: 'Unterstützt von der Clariona Voice Engine',
       status: {
-        idle: 'Bereit',
+        idle: 'Online',
         listening: 'Zuhören',
         speaking: 'Sprechen'
       }

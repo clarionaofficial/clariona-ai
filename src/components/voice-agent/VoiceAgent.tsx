@@ -70,10 +70,10 @@ export const VoiceAgent = () => {
                     <div className="flex items-center gap-2">
                       <span className={cn(
                         "w-1.5 h-1.5 rounded-full",
-                        status === 'idle' ? "bg-gray-400" : "bg-emerald-500 animate-pulse"
+                        status === 'idle' ? "bg-emerald-500" : "bg-brand-blue animate-pulse"
                       )} />
                       <span className="text-[10px] font-bold text-brand-body uppercase tracking-wider">
-                        {t(`voiceAgent.status.${status}`)}
+                        {status === 'idle' ? t('hero.onlineNow') : t(`voiceAgent.status.${status}`)}
                       </span>
                     </div>
                   </div>

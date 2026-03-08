@@ -335,8 +335,8 @@ export const Hero = () => {
                           : "bg-brand-blue/10 text-brand-blue border-brand-blue/20"
                       )}>
                         <div className={cn(
-                          "w-1.5 h-1.5 rounded-full animate-pulse",
-                          status === 'idle' ? "bg-emerald-500" : "bg-brand-blue"
+                          "w-1.5 h-1.5 rounded-full",
+                          status === 'idle' ? "bg-emerald-500" : "bg-brand-blue animate-pulse"
                         )} />
                         {status === 'idle' ? t('hero.onlineNow') : t(`voiceAgent.status.${status}`)}
                       </div>
