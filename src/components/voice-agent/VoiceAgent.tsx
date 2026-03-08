@@ -4,25 +4,12 @@ import { Mic, X, Play, Square, Volume2, MessageSquare } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useLanguage } from '../../lib/LanguageContext';
 
-// Mock Service
-const VoiceAgentService = {
-  status: 'idle',
-  transcript: [] as { role: 'user' | 'agent'; text: string }[],
-  
-  async startSession() {
-    return new Promise((resolve) => setTimeout(resolve, 1000));
-  },
-  
-  async stopSession() {
-    return new Promise((resolve) => setTimeout(resolve, 500));
-  }
-};
+import { useLiveAPI } from '../../lib/use-live-api';
 
 export const VoiceAgent = () => {
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = React.useState(false);
-  const [status, setStatus] = React.useState<'idle' | 'listening' | 'speaking'>('idle');
-  const [transcript, setTranscript] = React.useState(VoiceAgentService.transcript);
+  const { status, transcript, startSession, stopSession } = useLiveAPI();
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -33,18 +20,9 @@ export const VoiceAgent = () => {
 
   const toggleSession = async () => {
     if (status === 'idle') {
-      setStatus('listening');
-      // Mock interaction
-      setTimeout(() => {
-        setTranscript(prev => [...prev, { role: 'user', text: 'Hello, I want to learn more about your services.' }]);
-        setTimeout(() => {
-          setStatus('speaking');
-          setTranscript(prev => [...prev, { role: 'agent', text: 'Hello! I am Clariona AI. I can help you with website building, GMB ranking, or AI voice agents. Which one interests you most?' }]);
-          setTimeout(() => setStatus('listening'), 3000);
-        }, 1000);
-      }, 2000);
+      await startSession();
     } else {
-      setStatus('idle');
+      stopSession();
     }
   };
 
@@ -75,7 +53,7 @@ export const VoiceAgent = () => {
               onClick={() => setIsOpen(false)}
               className="absolute inset-0 bg-brand-heading/40 backdrop-blur-sm"
             />
-            
+
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -110,7 +88,7 @@ export const VoiceAgent = () => {
               </div>
 
               {/* Transcript */}
-              <div 
+              <div
                 ref={scrollRef}
                 className="flex-1 overflow-y-auto p-6 space-y-4 bg-brand-bg/30"
               >
@@ -127,8 +105,8 @@ export const VoiceAgent = () => {
                       key={i}
                       className={cn(
                         "max-w-[80%] p-4 rounded-2xl text-sm leading-relaxed",
-                        msg.role === 'user' 
-                          ? "ml-auto bg-brand-blue text-white rounded-tr-none" 
+                        msg.role === 'user'
+                          ? "ml-auto bg-brand-blue text-white rounded-tr-none"
                           : "bg-white border border-brand-blue/10 text-brand-body rounded-tl-none shadow-sm"
                       )}
                     >
@@ -146,18 +124,18 @@ export const VoiceAgent = () => {
                     {[...Array(12)].map((_, i) => (
                       <motion.div
                         key={i}
-                        animate={{ 
+                        animate={{
                           height: status !== 'idle' ? [10, Math.random() * 40 + 10, 10] : 4
                         }}
-                        transition={{ 
-                          repeat: Infinity, 
-                          duration: 0.5, 
-                          delay: i * 0.05 
+                        transition={{
+                          repeat: Infinity,
+                          duration: 0.5,
+                          delay: i * 0.05
                         }}
                         className={cn(
                           "w-1.5 rounded-full transition-colors",
-                          status === 'speaking' ? "bg-brand-orange" : 
-                          status === 'listening' ? "bg-brand-blue" : "bg-gray-200"
+                          status === 'speaking' ? "bg-brand-orange" :
+                            status === 'listening' ? "bg-brand-blue" : "bg-gray-200"
                         )}
                       />
                     ))}
@@ -167,8 +145,8 @@ export const VoiceAgent = () => {
                     onClick={toggleSession}
                     className={cn(
                       "w-20 h-20 rounded-full flex items-center justify-center transition-all shadow-xl active:scale-90",
-                      status === 'idle' 
-                        ? "bg-brand-blue text-white hover:bg-brand-blue/90" 
+                      status === 'idle'
+                        ? "bg-brand-blue text-white hover:bg-brand-blue/90"
                         : "bg-red-500 text-white hover:bg-red-600"
                     )}
                   >

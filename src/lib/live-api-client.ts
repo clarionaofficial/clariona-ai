@@ -1,0 +1,97 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { EventEmitter } from 'events';
+
+export class LiveAPIClient extends EventEmitter {
+    private ws: WebSocket | null = null;
+    private config: any;
+
+    constructor(config: { apiKey: string; model: string }) {
+        super();
+        this.config = config;
+    }
+
+    async connect() {
+        const url = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BiDiGenerateContent?key=${this.config.apiKey}`;
+
+        this.ws = new WebSocket(url);
+        this.ws.binaryType = 'arraybuffer';
+
+        return new Promise((resolve, reject) => {
+            this.ws!.onopen = () => {
+                console.log('Connected to Gemini Live API');
+                this.sendSetupMessage();
+                resolve(true);
+            };
+
+            this.ws!.onmessage = (event) => {
+                this.handleMessage(event);
+            };
+
+            this.ws!.onclose = () => {
+                console.log('Disconnected from Gemini Live API');
+                this.emit('close');
+            };
+
+            this.ws!.onerror = (error) => {
+                console.error('WebSocket Error:', error);
+                reject(error);
+            };
+        });
+    }
+
+    private sendSetupMessage() {
+        const setupMessage = {
+            setup: {
+                model: `models/${this.config.model}`,
+                generation_config: {
+                    response_modalities: ["AUDIO"]
+                }
+            }
+        };
+        this.ws?.send(JSON.stringify(setupMessage));
+    }
+
+    sendAudio(base64Audio: string) {
+        if (this.ws?.readyState === WebSocket.OPEN) {
+            const message = {
+                realtime_input: {
+                    media_chunks: [
+                        {
+                            mime_type: "audio/pcm;rate=16000",
+                            data: base64Audio
+                        }
+                    ]
+                }
+            };
+            this.ws.send(JSON.stringify(message));
+        }
+    }
+
+    private handleMessage(event: MessageEvent) {
+        try {
+            const response = JSON.parse(event.data);
+            if (response.serverContent?.modelTurn?.parts) {
+                for (const part of response.serverContent.modelTurn.parts) {
+                    if (part.inlineData) {
+                        this.emit('audio', part.inlineData.data);
+                    }
+                    if (part.text) {
+                        this.emit('text', part.text);
+                    }
+                }
+            }
+        } catch (e) {
+            // In some cases the message might contain binary data or split JSON
+            console.debug('Failed to parse message:', e);
+        }
+    }
+
+    disconnect() {
+        this.ws?.close();
+        this.ws = null;
+    }
+}
