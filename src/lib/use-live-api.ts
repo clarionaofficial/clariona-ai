@@ -15,6 +15,7 @@ export const useLiveAPI = () => {
 
     const startSession = useCallback(async () => {
         const apiKey = process.env.GEMINI_API_KEY;
+        console.log('GEMINI_API_KEY status:', !!apiKey);
         if (!apiKey) {
             console.error('GEMINI_API_KEY is not set');
             return;

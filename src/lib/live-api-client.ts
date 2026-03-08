@@ -79,9 +79,11 @@ export class LiveAPIClient extends Emitter {
 
     private handleMessage(event: MessageEvent) {
         try {
-            const response = JSON.parse(event.data);
-            if (response.serverContent?.modelTurn?.parts) {
-                for (const part of response.serverContent.modelTurn.parts) {
+            const message = JSON.parse(event.data);
+            console.log('Gemini Message:', message);
+
+            if (message.serverContent?.modelTurn?.parts) {
+                for (const part of message.serverContent.modelTurn.parts) {
                     if (part.inlineData) {
                         this.emit('audio', part.inlineData.data);
                     }
@@ -90,9 +92,12 @@ export class LiveAPIClient extends Emitter {
                     }
                 }
             }
+            if (message.setupComplete) {
+                console.log('Gemini Setup Complete');
+                this.emit('setupComplete');
+            }
         } catch (e) {
-            // In some cases the message might contain binary data or split JSON
-            console.debug('Failed to parse message:', e);
+            console.error('Error parsing Gemini message:', e);
         }
     }
 
